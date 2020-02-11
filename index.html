@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/general.css" />
+    <title>Github Jobs</title>
+  </head>
+  <body>
+    <header class="container header">
+      <h1>Github Jobs</h1>
+    </header>
+    <section class="container">
+      <h1>Find your Job!</h1>
+      <form>
+        <input
+          type="text"
+          name="location"
+          id="location"
+          placeholder="Location"
+          autocomplete="off"
+        />
+        <input
+          type="text"
+          name="job-description"
+          id="job-description"
+          autocomplete="off"
+          placeholder="Job Description"
+        />
+        <input type="checkbox" name="full-time" id="full-time" />
+        <label for="full-time">Full Time?</label>
+        <button type="submit" id="submit-btn" class="submit-btn">Search</button>
+      </form>
+    </section>
+    <section class="container">
+      <div id="root" class="jobs-list"></div>
+      <div>
+        <div id="job-info" class="job-info"></div>
+      </div>
+    </section>
+    <script src="index.js"></script>
+    <script src="core/github/api.js"></script>
+  </body>
+</html>

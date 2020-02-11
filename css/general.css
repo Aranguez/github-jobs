@@ -1,0 +1,97 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito Sans', sans-serif;
+}
+
+.container {
+    max-width: 1600px;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.header {
+    padding: 25px 0;
+    margin-bottom: 50px;
+}
+
+form {
+    margin: 20px 0;
+}
+
+input[type='text'] {
+    padding: 8px;
+    outline: none;
+    margin-right: 5px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+}
+
+.submit-btn {
+    padding: 8px 0;
+    border-radius: 3px;
+    border: none;
+    background-color: dodgerblue;
+    color: #fff;
+    font-weight: 700;
+    width: 100px;
+    margin-left: 10px;
+    transition: all .3s ease;
+    cursor: pointer;
+}
+
+.submit-btn:hover {
+    background-color: rgb(11, 118, 224);
+}
+
+.jobs-list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 30px 0;
+}
+
+.job-box {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 3px #0002;
+    display: flex;
+    justify-content: space-between;
+    width: 45%;
+    position: relative;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.job-box .content {
+    width: 100%;
+}
+
+.job-box .like {
+    width: 20px;
+}
+
+.job-box:hover {
+    box-shadow: 0px 5px 6px #0003;
+}
+
+.job-box:active {
+    box-shadow: 0px 0px 10px #0003;
+}
+
+.job-box .fa-heart,
+.job-box .fa-heart-o {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.job-box .fa-heart {
+    color: crimson;
+}
+
+.job-info {
+    
+}
