@@ -43,13 +43,16 @@
         <button type="submit" id="submit-btn" class="submit-btn">Search</button>
       </form>
     </section>
+
     <section class="container">
-      <div id="root" class="jobs-list"></div>
-      <div>
-        <div id="job-info" class="job-info"></div>
+      <div class="jobs-container">
+        <div id="jobs-list" class="jobs-list"></div>
+        <div id="jobs-liked-list" class="jobs-liked-list"></div>
       </div>
+      
+      <article id="job-info" class="job-info"></article>
     </section>
-    <script src="index.js"></script>
-    <script src="core/github/api.js"></script>
+    <script src="index.js" type="module"></script>
+    <!-- <script src="./core/github/api.js" type="module"></script> -->
   </body>
 </html>

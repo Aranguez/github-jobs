@@ -1,7 +1,4 @@
-//import API from 'core/api.js'
-
-//https://jobs.github.com/positions.json?description=python&full_time=true&location=sf
-const baseUrl = "https://jobs.github.com/positions.json";
+import API from './core/github/api.js';
 
 //inputs
 const locationInput = document.querySelector("#location");
@@ -10,67 +7,111 @@ const fulltimeCheck = document.querySelector("#full-time");
 
 //submit button and results container
 const submitBtn = document.querySelector("#submit-btn");
-const rootDiv = document.querySelector("#root");
+const jobsList = document.querySelector("#jobs-list");
+const jobsLikedList = document.querySelector('#jobs-liked-list');
 
 //job boxes to click and its description container
 const jobBoxes = document.querySelectorAll(".job-box");
 const jobDescription = document.getElementById("job-info");
 
-const getJobs = async (location, description, fulltimeValue) => {
-  rootDiv.innerHTML = '';
+const likedJobs = JSON.parse(window.localStorage.getItem('likes'));
+getLiked(likedJobs);
+
+function getLiked(items) {
+  jobsLikedList.innerHTML = '';
+
+  items && items.forEach(({ id, title, company }) => {
+    const jobBox = document.createElement("div");
+    jobBox.classList.add("job-box");
+    jobBox.innerHTML += `
+      <div id="${id}" class="content">
+        <h3>${title}</h3>
+        <p>${company}</p>
+      </div>
+      <div class="like">
+        <i class="fa fa-heart" id="${id}-liked"></i>
+      </div>
+    `;
+  
+    jobsLikedList.appendChild(jobBox);
+  
+    // get info method
+    document.getElementById(id).onclick = () => getById(id);
+    // like method
+    document.getElementById(`${id}-liked`).onclick = () => {
+      const likes = JSON.parse(window.localStorage.getItem('likes'));
+      const updatedLikes = likes.filter(item => item.id !== id);
+      window.localStorage.setItem('likes', JSON.stringify(updatedLikes));
+      getLiked(updatedLikes);
+
+      document.getElementById(`${id}-like`).classList.remove('fa-heart')
+      document.getElementById(`${id}-like`).classList.add('fa-heart-o')
+    };
+  });
+}
+
+async function getJobs(location, description, fulltimeValue) {
+  jobsList.innerHTML = '';
   jobDescription.innerHTML = '';
+  const data = await API.getJobs(description, location, fulltimeValue);
+  const likedJobs = JSON.parse(window.localStorage.getItem('likes')) || [];
 
-  fetch(
-    `${baseUrl}?description=${description}&location=${location}&full_time=${fulltimeValue}`
-  )
-    .then(res => res.json())
-    .then(data => {
-      if (data.length) {
-        data.forEach(job => {
-          const jobBox = document.createElement("div");
-          jobBox.classList.add("job-box");
+  if (data.length) {
+    data.forEach(({ id, title, company }) => {
+      const isLiked = likedJobs.find(likedJob => likedJob.id === id);
+      const jobBox = document.createElement("div");
+      jobBox.classList.add("job-box");
 
-          jobBox.innerHTML += `
-            <div id="${job.id}" class="content">
-              <h3>${job.title}</h3>
-              <p>${job.company}</p>
-            </div>
-            <div class="like">
-              <i class="fa fa-heart-o" id="${job.id}-like"></i>
-            </div>
-          `;
+      jobBox.innerHTML += `
+        <div id="${id}" class="content">
+          <h3>${title}</h3>
+          <p>${company}</p>
+        </div>
+        <div class="like">
+          <i class="fa ${isLiked ? 'fa-heart' : 'fa-heart-o' }" id="${id}-like"></i>
+        </div>
+      `;
 
-          rootDiv.appendChild(jobBox);
-          document.getElementById(job.id).onclick = () => getById(job.id);
-          document.getElementById(`${job.id}-like`).onclick = e => {
-            if (e.target.classList.contains('fa-heart-o')) {
-              e.target.classList.remove('fa-heart-o')
-              e.target.classList.add('fa-heart')
-            } else {
-              if (e.target.classList.contains('fa-heart')) {
-                e.target.classList.remove('fa-heart')
-                e.target.classList.add('fa-heart-o')
-              }
-            }
-          };
-        });
-      } else {
-        console.log("No se encontraron resultados");
-      }
+      jobsList.appendChild(jobBox);
+
+      // get info method
+      document.getElementById(id).onclick = () => getById(id);
+      // like method
+      document.getElementById(`${id}-like`).onclick = e => {
+        if (e.target.classList.contains('fa-heart-o')) {
+          e.target.classList.remove('fa-heart-o');
+          e.target.classList.add('fa-heart');
+
+          const likes = JSON.parse(window.localStorage.getItem('likes')) || [];
+          likes.push({ id, title, company });
+          window.localStorage.setItem('likes', JSON.stringify(likes));
+          getLiked(likes);
+        } else {
+          if (e.target.classList.contains('fa-heart')) {
+            e.target.classList.remove('fa-heart');
+            e.target.classList.add('fa-heart-o');
+
+            const likes = JSON.parse(window.localStorage.getItem('likes'));
+            const updatedLikes = likes.filter(item => item.id !== id);
+            window.localStorage.setItem('likes', JSON.stringify(updatedLikes));
+            getLiked(updatedLikes);
+          }
+        }
+      };
     });
+  } else {
+    console.log("No se encontraron resultados");
+  }
 };
 
-const getById = id => {
-  fetch(`https://jobs.github.com/positions/${id}.json`)
-    .then(res => res.json())
-    .then(data => {
-      jobDescription.innerHTML = `
-        <h1>JOB DESCRIPTION</h1>
-        <h2>${data.title}</h2>
-        <small>${data.company}</small>
-        <p>${data.description}</p>
-      `;
-    });
+async function getById(id) {
+  const data = await API.getJob(id);
+  jobDescription.innerHTML = `
+      <h1>JOB DESCRIPTION</h1>
+      <h2>${data.title}</h2>
+      <small>${data.company}</small>
+      <p>${data.description}</p>
+    `;
 };
 
 submitBtn.addEventListener("click", async e => {
