@@ -11,7 +11,6 @@ const jobsList = document.querySelector("#jobs-list");
 const jobsLikedList = document.querySelector('#jobs-liked-list');
 
 //job boxes to click and its description container
-const jobBoxes = document.querySelectorAll(".job-box");
 const jobDescription = document.getElementById("job-info");
 
 const likedJobs = JSON.parse(window.localStorage.getItem('likes'));
@@ -51,10 +50,13 @@ function getLiked(items) {
 }
 
 async function getJobs(location, description, fulltimeValue) {
-  jobsList.innerHTML = '';
+  jobsList.innerHTML = 'Loading';
   jobDescription.innerHTML = '';
-  const data = await API.getJobs(description, location, fulltimeValue);
   const likedJobs = JSON.parse(window.localStorage.getItem('likes')) || [];
+  
+  //load data
+  const data = await API.getJobs(description, location, fulltimeValue);
+  jobsList.innerHTML = '';
 
   if (data.length) {
     data.forEach(({ id, title, company }) => {
@@ -101,6 +103,9 @@ async function getJobs(location, description, fulltimeValue) {
     });
   } else {
     console.log("No se encontraron resultados");
+    const jobBox = document.createElement("div");
+    jobBox.innerHTML += `<p>No se encontraron resultados</p>`;
+    jobsList.appendChild(jobBox);
   }
 };
 
@@ -114,8 +119,9 @@ async function getById(id) {
     `;
 };
 
-submitBtn.addEventListener("click", async e => {
+submitBtn.addEventListener("click", e => {
   e.preventDefault();
+
   const locationValue = locationInput.value;
   const descriptionValue = descriptionInput.value;
   const fulltimeValue = fulltimeCheck.checked;

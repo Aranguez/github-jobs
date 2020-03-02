@@ -47,18 +47,20 @@ input[type='text'] {
 .jobs-container {
     display: flex;
     justify-content: space-between;
+    margin-top: 50px;
 }
 
 .jobs-container > div {
     width: 48%;
 }
 
-.jobs-list {
+.jobs-list,
+.jobs-liked-list {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
     width: 100%;
-    margin: 30px 0;
+    margin: 20px 0;
 }
 
 .job-box {
