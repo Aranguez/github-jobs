@@ -1,0 +1,28 @@
+{
+  "name": "github-jobs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --watch-all"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aranguez/github-jobs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aranguez/github-jobs/issues"
+  },
+  "homepage": "https://github.com/Aranguez/github-jobs#readme",
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "@babel/preset-env": "^7.8.7",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "jest": "^25.1.0"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.8.7"
+  }
+}
